@@ -13,10 +13,11 @@ import static com.codeborne.selenide.Selenide.*;
 public class ChitaiGorodAnnotationTests extends TestsBase {
 
     @ParameterizedTest(name = "Результат поисковой выдачи для запроса {0}")
-    @ValueSource(strings = {"Дюна", "Java"})
+    @ValueSource(strings = {"Гарри Поттер", "Дюна"})
     void positiveSearchTest(String setSeach) {
         open("");
-        $(".header-search__input").setValue(setSeach).pressEnter();
+        $(".header-search__input").sendKeys(setSeach);
+        $(".header-search__button").click();
         $(".product-title__head").shouldHave(Condition.text(setSeach));
     }
 

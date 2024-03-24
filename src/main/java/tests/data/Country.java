@@ -12,8 +12,8 @@ public enum Country {
 
     }
 
-    public String countryName;
-    public String countryCapital;
+    public final String countryName;
+    public final String countryCapital;
 
 }
 
