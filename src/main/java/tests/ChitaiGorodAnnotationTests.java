@@ -5,21 +5,22 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import tests.data.Country;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class TastsWithAnnotation extends TestsBase {
+public class ChitaiGorodAnnotationTests extends TestsBase {
 
-    @ParameterizedTest(name = "PositiveSearchTest")
+    @ParameterizedTest(name = "Результат поисковой выдачи для запроса {0}")
     @ValueSource(strings = {"Дюна", "Java"})
-    void PositiveSearchTest(String SetSeach) {
-        open("https://www.chitai-gorod.ru");
-        $(".header-search__input").setValue(SetSeach).pressEnter();
-        $(".product-title__head").shouldHave(Condition.text(SetSeach));
+    void positiveSearchTest(String setSeach) {
+        open("");
+        $(".header-search__input").setValue(setSeach).pressEnter();
+        $(".product-title__head").shouldHave(Condition.text(setSeach));
     }
 
-    @ParameterizedTest(name = "itemSuitInCategoryTest")
+    @ParameterizedTest(name = "Список элементов в каталоге соответсвует разделу {0} ")
     @CsvSource(value = {
             "Книги, Художественная литература",
             "Игры и игрушки, Настольные игры",
@@ -29,21 +30,24 @@ public class TastsWithAnnotation extends TestsBase {
             "Подарки и сувениры,Посуда и текстиль"
     })
     void itemSuitInCategory(String category, String item) {
-        open("https://www.chitai-gorod.ru");
-        $(".header-city__title").click();
+        open("");
+        $(".change-city__buttons").shouldBe(Condition.visible);
         $(".change-city__buttons").$(byText("Да, я здесь")).click();
         $(".catalog__button").click();
         $(".categories-menu__column").$(byText(category)).click();
         $(".modal__content").shouldHave(Condition.text(item));
     }
 
-    @ParameterizedTest(name = "changeCountryTest")
+    @ParameterizedTest(name = "Список городов для доставки соответствует выбранной стране {0}")
     @EnumSource(Country.class)
-    void changeCountry(Enum country) {
-        open("https://www.chitai-gorod.ru");
+    void changeCountry(Country country) {
+        open("");
+        $(".change-city__buttons").shouldBe(Condition.visible);
         $(".change-city__buttons").$(byText("Нет, изменить город")).click();
         $(".app-select__view").click();
-        $(".app-select__list").$(byText(country.name())).click();
+        $(".app-select__list").$(byText(country.countryName)).click();
+        $(".city-modal__content").shouldHave(Condition.text(country.countryCapital));
+
 
     }
 
